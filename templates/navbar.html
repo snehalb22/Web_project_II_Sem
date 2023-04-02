@@ -1,0 +1,44 @@
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="padding: 0px">
+  <div class="container-fluid" style="background-color: #65647c">
+    <a
+      class="navbar-brand"
+      class="nav-link"
+      href="{{ url_for('home')}}"
+      style="color: #f1d3b3"
+      >BookWORLD</a
+    >
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarText"
+      aria-controls="navbarText"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <span class="navbar-text navLogger">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            {% if session['logged_in'] %}
+            <a class="nav-link" style="color: #f1d3b3">Hi {{ session['username']|title }}</a>
+            {% else %}
+            <a class="nav-link" style="color: #f1d3b3" href="{{ url_for('login')}}">Login</a>
+            {% endif %}
+          </li>
+          <li class="nav-item">
+            {% if session['logged_in'] %}
+            <a class="nav-link" href="{{ url_for('logout')}}" style="color: #f1d3b3">Logout</a>
+            {% else %}
+            <a class="nav-link" href="{{ url_for('signup')}}" style="color: #f1d3b3">SignUp</a>
+            {% endif %}
+          </li>
+        </ul>
+      </span>
+    </div>
+  </div>
+</nav>
+{% endblock %}
