@@ -30,7 +30,7 @@ db = SQLAlchemy(app)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = SECRET_KEY
-db.init_app(app)
+
 migrate = Migrate(app, db)
 
 login_manager = LoginManager()
@@ -54,7 +54,7 @@ class ProductsInfo(db.Model, UserMixin):
     author = db.Column(db.String(200), nullable=False)
     description = db.Column(db.String(200), nullable=False)
     price = db.Column(db.Integer)
-    link = db.Column(db.String(200), nullable=False)
+    #link = db.Column(db.String(200), nullable=False)
     dateaddes = db.Column(db.DateTime, default=datetime.utcnow)
     imageName = db.Column(db.Text, nullable=True)
     description = db.Column(db.String(200), nullable=False)
@@ -77,7 +77,6 @@ class User(db.Model, UserMixin):
 
 class Orders(db.Model):
     id = db.Column(db.Integer, db.Sequence('seq_reg_id', start=1, increment=1),primary_key=True)
-    bookId = db.Column(db.Integer)
     bookName=db.Column(db.String(40),nullable=True)
     userName=db.Column(db.String(40),nullable=True)
     orderDate = db.Column(db.DateTime, default=datetime.utcnow)
@@ -147,7 +146,7 @@ def adminHome():
                 author=request.form['productAuthor'],
                 description=request.form['productDescription'],
                 price=request.form['productPrice'],
-                link=request.form['productLink'],
+                #link=request.form['productLink'],
                 imageName=image.filename
             )
             try:
@@ -206,7 +205,7 @@ def UpdateProducts():
         author = request.form['productAuthor']
         description = request.form['productDescription']
         price = request.form['productPrice']
-        link = request.form['productLink']
+        #link = request.form['productLink']
         image = request.files['productImage']
         if image and allowed_file(image.filename):
             filename = secure_filename(image.filename)
@@ -214,13 +213,13 @@ def UpdateProducts():
 
             image = image.filename
             db.session.query(ProductsInfo).filter(ProductsInfo.id == request.form['product_id']).update(
-                {'name': name, 'author': author, 'description': description, 'price': price, 'link': link, 'imageName': image})
+                {'name': name, 'author': author, 'description': description, 'price': price, 'imageName': image})
             db.session.commit()
             flash(f'Product updated successfully', 'success')
 
         else:
             db.session.query(ProductsInfo).filter(ProductsInfo.id == request.form['product_id']).update(
-                {'name': name, 'author': author, 'description': description, 'price': price, 'link': link})
+                {'name': name, 'author': author, 'description': description, 'price': price, })
             db.session.commit()
             flash(f'Product updated successfully', 'success')
 
@@ -245,7 +244,7 @@ def orderDetails():
     #userResult = User.query.filter(User.username == user).first()
     #print(userResult.id)
 
-    db.session.add(Orders(bookId=productId,bookName=productName,userName=user))
+    db.session.add(Orders(bookName=productName,userName=user))
     db.session.commit()
 
     return redirect('/')
@@ -371,7 +370,7 @@ client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret
 flow = Flow.from_client_secrets_file(  #Flow is OAuth 2.0 a class that stores all the information on how we want to authorize our users
     client_secrets_file=client_secrets_file,
     scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],  #here we are specifing what do we get after the authorization
-    redirect_uri="http://127.0.0.1:5000/callback"  #and the redirect URI is the point where the user will end up after the authorization
+    redirect_uri="http://flaskwebapp.pythonanywhere.com/callback"  #and the redirect URI is the point where the user will end up after the authorization
 )
 
 def login_is_required(function):  #a function to check if the user is authorized or not

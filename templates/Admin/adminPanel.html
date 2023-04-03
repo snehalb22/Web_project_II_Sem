@@ -53,10 +53,7 @@
                 <label for="productPrice" class="form-label">Product Price: </label>
                 <input type="text" class="form-control" name="productPrice" id="productPrice" required />
             </div>
-            <div class="mb-3">
-                <label for="productLink" class="form-label">Product Download Link: </label>
-                <input type="text" class="form-control" name="productLink" id="productLink" required />
-            </div>
+           
             <div class="mb-3">
                 <label for="productImage" class="form-label">Product Thumbnail: </label>
                 <input type="file" class="form-control" name="productImage" id="productImage" required /><br /><br />
@@ -78,7 +75,7 @@
                             <th style="width:20%">Name</th>
                             <th style="width:30%">Description</th>
                             <th style="width:20%">Price</th>
-                            <th style="width:20%">Download Link</th>
+                        
                             <th style="width:20%">Actions</th>
                         </tr>
                     </thead>
@@ -88,7 +85,7 @@
                             <td style="width:20%; word-wrap:break-word;">{{product.name}}</td>
                             <td style="width:30%; word-wrap:break-word;">{{product.description}}</td>
                             <td style="width:20%; word-wrap:break-word;">{{product.price}}</td>
-                            <td style="width:20%; word-wrap:break-word;">{{product.link}}</td>
+                            
                             <div class="container" style="text-align:center; " class="mb-4" id="buttons">
                                 <td style="width:20%; word-wrap:break-word;">
                                     <a href="/update/{{product.id}}"><button class="btn btn-success">Update</button></a>
