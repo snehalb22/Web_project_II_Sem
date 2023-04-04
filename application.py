@@ -70,6 +70,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(20), nullable=False, unique=True)
     mobile = db.Column(db.String(20), nullable=False, unique=True)
+    address = db.Column(db.String(90))
 
 # -----------------------> Table containing details of orders
 
@@ -92,6 +93,8 @@ class RegsiterForm(FlaskForm):
         min=4, max=40)], render_kw={"placeholder": "Email"})
     mobile = StringField(validators=[InputRequired(), Length(
         min=10, max=15)], render_kw={"placeholder": "Mobile no."})
+    address = StringField(validators=[InputRequired(), Length(
+        min=10, max=100)], render_kw={"placeholder": "Address"})
     password = PasswordField(validators=[InputRequired(), Length(
         min=4, max=20)], render_kw={"placeholder": "Password"})
     password2 = PasswordField(validators=[InputRequired(), ],
@@ -332,7 +335,7 @@ def signup():
                 hashed_password = bcrypt.generate_password_hash(
                     form.password.data, 12)
                 new_user = User(username=form.username.data, password=hashed_password,
-                                email=form.email.data, mobile=form.mobile.data)
+                                email=form.email.data, mobile=form.mobile.data,address=form.address.data)
                 db.session.add(new_user)
                 db.session.commit()
                 flash(f'You have signed up successfully. Please login now.', 'success')
@@ -370,7 +373,7 @@ client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret
 flow = Flow.from_client_secrets_file(  #Flow is OAuth 2.0 a class that stores all the information on how we want to authorize our users
     client_secrets_file=client_secrets_file,
     scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],  #here we are specifing what do we get after the authorization
-    redirect_uri="http://flaskwebapp.pythonanywhere.com/callback"  #and the redirect URI is the point where the user will end up after the authorization
+    redirect_uri="http://flaskwebappbook.pythonanywhere.com/callback"  #and the redirect URI is the point where the user will end up after the authorization
 )
 
 def login_is_required(function):  #a function to check if the user is authorized or not
